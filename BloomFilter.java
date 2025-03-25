@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Larry Gao / COMP 400C 002 SP25
  *
  *   Note, additional comments provided throughout source code is
  *   for educational purposes.
@@ -224,8 +224,16 @@ class BloomFilter {
         // this class on available methods. You can also see how method 'add'
         // in this class uses the object.
 
-        return false;
-    }
+        for (int n = 0; n < noHashes; n++) {
+            long hc = hashCode(s, n);
+            int bitNo = (int) (hc) & this.hashMask;
+            if (!data.get(bitNo)) {
+                return false; // if any bit not set, string is definitely not in filter
+            }
+        }
+
+        return true; // if all bits are set, string is possibly in filter
+    } // end method contains
 
 
     /*********************************
