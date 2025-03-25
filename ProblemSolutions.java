@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Larry Gao / COMP 400C 002 SP25
  *
  *   This java file contains the problem solutions of isSubSet, findKthLargest,
  *   and sort2Arrays methods. You should utilize the Java Collection Framework for
@@ -31,11 +31,21 @@ class ProblemSolutions {
      */
 
     public boolean isSubset(int list1[], int list2[]) {
-
-        // ADD YOU CODE HERE -- DON'T FORGET TO ADD YOR NAME AT TOP OF FILE
-
-        return false;
-    }
+        // create HashSet to store elements of array
+        Set<Integer> set = new HashSet<>();
+        for (int num : array) {
+            set.add(num);
+        }
+        
+        // check if every element in k exists in set
+        for (int num : k) {
+            if (!set.contains(num)) {
+                return false;
+            }
+        }
+        
+        return true;
+    } // end method isSubset
 
 
     /**
@@ -52,11 +62,20 @@ class ProblemSolutions {
      */
 
     public int findKthLargest(int[] array, int k) {
+        // create min-heap to store top k largest elements
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
 
-        // ADD YOUR CODE HERE
+        // add elements to the heap, keeping only k elements at a time
+        for (int num : array) {
+            minHeap.add(num);
+            if (minHeap.size() > k) {
+                minHeap.poll(); // remove smallest element to maintain size k
+            }
+        }
 
-        return 0;
-    }
+        // root of heap is k-th largest element
+        return minHeap.peek();
+    } // end method findKthLargest
 
 
     /**
@@ -73,10 +92,23 @@ class ProblemSolutions {
      */
 
     public int[] sort2Arrays(int[] array1, int[] array2) {
+        // create new array to hold all elements from array1 and array2
+        int[] merged = new int[array1.length + array2.length];
 
-        // ADD YOU CODE HERE
+        // copy elements from array1 into merged
+        for (int i = 0; i < array1.length; i++) {
+            merged[i] = array1[i];
+        }
 
-        return null;
-    }
+        // copy elements from array2 into merged
+        for (int i = 0; i < array2.length; i++) {
+            merged[array1.length + i] = array2[i];
+        }
 
-}
+        // sort merged
+        Arrays.sort(merged);
+
+        return merged;
+    } // end method sort2Arrays
+
+} // end class ProblemSolutions
