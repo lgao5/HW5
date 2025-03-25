@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Larry Gao / COMP 400C 002 SP25
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -250,8 +250,43 @@ public class CuckooHash<K, V> {
 		// Also make sure you read this method's prologue above, it should help
 		// you. Especially the two HINTS in the prologue.
 
-		return;
-	}
+		Bucket<K, V> newBucket = new Bucket<>(key, value);
+		int pos1 = hash1(key);
+		int pos2 = hash2(key);
+
+		// check if key with same value already exists
+		if (table[pos1] != null && table[pos1].getBucKey().equals(key) && table[pos1].getValue().equals(value)) {
+			return; // do nothing, dup key-value pair
+		}
+		if (table[pos2] != null && table[pos2].getBucKey().equals(key) && table[pos2].getValue().equals(value)) {
+			return;
+		}
+
+		// try inserting at first hash position
+		for (int attempts = 0; attempts < CAPACITY; attempts++) {
+			if (table[pos1] == null) {
+				table[pos1] = newBucket;
+				return;
+			}
+
+			// swap out existing bucket
+			Bucket<K, V> displaced = table[pos1];
+			table[pos1] = newBucket;
+			newBucket = displaced;
+
+			// move displaced key to its alternate position
+			pos1 = (pos1 == hash1(newBucket.getBucKey())) ? hash2(newBucket.getBucKey()) : hash1(newBucket.getBucKey());
+
+			if (table[pos1] == null) {
+				table[pos1] = newBucket;
+				return;
+			}
+		}
+
+		// if shuffled CAPACITY times, assume a cycle and rehash
+		rehash();
+		put(newBucket.getBucKey(), newBucket.getValue()); // reinsert displaced element
+	} // end method put
 
 
 	/**
