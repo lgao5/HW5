@@ -33,12 +33,12 @@ class ProblemSolutions {
     public boolean isSubset(int list1[], int list2[]) {
         // create HashSet to store elements of array
         Set<Integer> set = new HashSet<>();
-        for (int num : array) {
+        for (int num : list1) {
             set.add(num);
         }
         
         // check if every element in k exists in set
-        for (int num : k) {
+        for (int num : list2) {
             if (!set.contains(num)) {
                 return false;
             }
